@@ -133,6 +133,9 @@ export default function ProblemFormModal({ isOpen, onClose, editProblem, default
       queryClient.invalidateQueries({ queryKey: ['patterns'] });
       onClose();
     },
+    onError: (error: any) => {
+      alert(error.message || "Failed to create problem.");
+    },
   });
 
   const updateMutation = useMutation({
@@ -143,6 +146,9 @@ export default function ProblemFormModal({ isOpen, onClose, editProblem, default
       queryClient.invalidateQueries({ queryKey: ['phases'] });
       queryClient.invalidateQueries({ queryKey: ['patterns'] });
       onClose();
+    },
+    onError: (error: any) => {
+      alert(error.message || "Failed to update problem.");
     },
   });
 

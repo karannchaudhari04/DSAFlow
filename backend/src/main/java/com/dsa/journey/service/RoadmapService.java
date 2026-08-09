@@ -18,9 +18,15 @@ public class RoadmapService {
 
     private final PhaseRepository phaseRepository;
     private final PatternRepository patternRepository;
+    private final com.dsa.journey.repository.ProblemRepository problemRepository;
 
     public List<Phase> getAllPhases() {
-        return phaseRepository.findAllByOrderBySequenceOrderAsc();
+        List<Phase> phases = phaseRepository.findAllByOrderBySequenceOrderAsc();
+        List<com.dsa.journey.entity.Problem> problems = problemRepository.findAll();
+        for (Phase phase : phases) {
+            phase.setStatus(phase.calculateStatus(problems));
+        }
+        return phases;
     }
 
     public List<Pattern> getAllPatterns() {

@@ -61,6 +61,9 @@ export default function Roadmap() {
       queryClient.invalidateQueries({ queryKey: ['problems'] });
       queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
       queryClient.invalidateQueries({ queryKey: ['phases'] });
+    },
+    onError: (error: any) => {
+      alert(error.message || "Failed to update problem status.");
     }
   });
 

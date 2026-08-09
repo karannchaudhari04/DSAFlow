@@ -107,7 +107,8 @@ async function request<T>(endpoint: string, options?: RequestInit): Promise<T> {
   }
 
   if (!response.ok) {
-    throw new Error(`API Error: ${response.status} ${response.statusText}`);
+    const errText = await response.text();
+    throw new Error(errText || `API Error: ${response.status} ${response.statusText}`);
   }
 
   // Handle empty responses

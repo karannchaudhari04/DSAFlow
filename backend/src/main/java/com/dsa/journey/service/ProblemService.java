@@ -40,6 +40,14 @@ public class ProblemService {
         Pattern pattern = patternRepository.findById(request.getPatternId())
                 .orElseThrow(() -> new IllegalArgumentException("Pattern not found with ID: " + request.getPatternId()));
 
+        String newStatus = request.getStatus();
+        boolean isMarkingSolved = "COMPLETED".equalsIgnoreCase(newStatus) || 
+                                  "MASTERED".equalsIgnoreCase(newStatus) || 
+                                  "REVISION_SCHEDULED".equalsIgnoreCase(newStatus);
+        if (isMarkingSolved) {
+            throw new IllegalArgumentException("Cannot manually create a solved problem. Please solve it on LeetCode and sync it using the Chrome extension first!");
+        }
+
         Problem problem = Problem.builder()
                 .leetcodeNumber(request.getLeetcodeNumber())
                 .name(request.getName())
@@ -50,6 +58,7 @@ public class ProblemService {
                 .timeTakenMinutes(request.getTimeTakenMinutes())
                 .attemptsCount(request.getAttemptsCount() != null ? request.getAttemptsCount() : 1)
                 .independentSolve(request.getIndependentSolve() != null ? request.getIndependentSolve() : true)
+                .leetcodeVerified(false)
                 .pattern(pattern)
                 .build();
 
@@ -90,6 +99,19 @@ public class ProblemService {
 
         Pattern pattern = patternRepository.findById(request.getPatternId())
                 .orElseThrow(() -> new IllegalArgumentException("Pattern not found with ID: " + request.getPatternId()));
+
+        String newStatus = request.getStatus();
+        boolean isMarkingSolved = "COMPLETED".equalsIgnoreCase(newStatus) || 
+                                  "MASTERED".equalsIgnoreCase(newStatus) || 
+                                  "REVISION_SCHEDULED".equalsIgnoreCase(newStatus);
+        
+        if (isMarkingSolved && !Boolean.TRUE.equals(problem.getLeetcodeVerified())) {
+            throw new IllegalArgumentException("This problem has not been verified on LeetCode. Please solve it on LeetCode and sync it using the Chrome extension first!");
+        }
+
+        if ("NOT_STARTED".equalsIgnoreCase(newStatus) || "IN_PROGRESS".equalsIgnoreCase(newStatus)) {
+            problem.setLeetcodeVerified(false);
+        }
 
         problem.setLeetcodeNumber(request.getLeetcodeNumber());
         problem.setName(request.getName());
@@ -174,10 +196,11 @@ public class ProblemService {
 
             if (existingOpt.isPresent()) {
                 Problem existing = existingOpt.get();
+                existing.setLeetcodeVerified(true);
                 if (!"MASTERED".equals(existing.getStatus())) {
                     existing.setStatus("COMPLETED");
-                    problemRepository.save(existing);
                 }
+                problemRepository.save(existing);
             } else {
                 Problem problem = Problem.builder()
                         .leetcodeNumber(req.getLeetcodeNumber())
@@ -188,6 +211,7 @@ public class ProblemService {
                         .dateSolved(LocalDate.now())
                         .attemptsCount(1)
                         .independentSolve(true)
+                        .leetcodeVerified(true)
                         .pattern(defaultPattern)
                         .build();
 

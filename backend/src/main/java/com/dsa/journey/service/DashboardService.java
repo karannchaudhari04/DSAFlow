@@ -77,6 +77,7 @@ public class DashboardService {
                     .count();
 
             int readinessPercentage = (int) Math.min((solvedCount * 100) / targetProblemsPerPhase, 100);
+            String dynamicStatus = phase.calculateStatus(problems);
 
             topicReadinessList.add(DashboardStatsResponse.TopicReadiness.builder()
                     .phaseId(phase.getId())
@@ -86,7 +87,7 @@ public class DashboardService {
                     .masteredCount(masteredCountInPhase)
                     .readinessPercentage(readinessPercentage)
                     .priority(phase.getPriority())
-                    .status(phase.getStatus())
+                    .status(dynamicStatus)
                     .build());
         }
 

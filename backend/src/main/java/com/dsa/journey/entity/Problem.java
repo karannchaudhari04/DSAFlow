@@ -61,6 +61,10 @@ public class Problem {
     @Builder.Default
     private Boolean independentSolve = true;
 
+    @Column(name = "leetcode_verified", nullable = false)
+    @Builder.Default
+    private Boolean leetcodeVerified = false;
+
     @OneToOne(mappedBy = "problem", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private ProblemDetail detail;
 

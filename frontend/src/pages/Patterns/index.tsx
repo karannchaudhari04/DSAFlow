@@ -59,6 +59,9 @@ export default function Patterns() {
       queryClient.invalidateQueries({ queryKey: ['problems'] });
       queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
       queryClient.invalidateQueries({ queryKey: ['patterns'] });
+    },
+    onError: (error: any) => {
+      alert(error.message || "Failed to update problem status.");
     }
   });
 
