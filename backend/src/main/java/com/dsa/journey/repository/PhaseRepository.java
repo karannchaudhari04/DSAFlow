@@ -9,5 +9,6 @@ import java.util.UUID;
 
 @Repository
 public interface PhaseRepository extends JpaRepository<Phase, UUID> {
+    @org.springframework.data.jpa.repository.EntityGraph(attributePaths = {"patterns"})
     List<Phase> findAllByOrderBySequenceOrderAsc();
 }

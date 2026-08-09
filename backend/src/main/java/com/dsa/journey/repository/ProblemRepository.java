@@ -10,7 +10,13 @@ import java.util.UUID;
 
 @Repository
 public interface ProblemRepository extends JpaRepository<Problem, UUID> {
+    @Override
+    @org.springframework.data.jpa.repository.EntityGraph(attributePaths = {"detail", "pattern"})
+    List<Problem> findAll();
+
+    @org.springframework.data.jpa.repository.EntityGraph(attributePaths = {"detail", "pattern"})
     List<Problem> findAllByOrderByLeetcodeNumberAsc();
+
     List<Problem> findByPatternId(UUID patternId);
     List<Problem> findByStatus(String status);
     Optional<Problem> findByLeetcodeNumber(Integer leetcodeNumber);
