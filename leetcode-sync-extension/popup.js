@@ -48,7 +48,7 @@ document.getElementById("sync-history-btn").addEventListener("click", async () =
     statusBox.textContent = `Sending ${solvedQuestions.length} solved problems to local sheet...`;
 
     // Send solved questions to local DSA Journey backend
-    const syncResponse = await fetch("http://localhost:8080/api/problems/sync", {
+    const syncResponse = await fetch("https://dsaflow-kjkc.onrender.com/api/problems/sync", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

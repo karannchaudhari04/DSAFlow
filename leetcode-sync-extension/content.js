@@ -95,7 +95,7 @@ function triggerProblemSync() {
 
   console.log("LeetCode Sync Pipeline: Syncing problem metadata:", payload);
 
-  fetch("http://localhost:8080/api/problems/sync", {
+  fetch("https://dsaflow-kjkc.onrender.com/api/problems/sync", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
