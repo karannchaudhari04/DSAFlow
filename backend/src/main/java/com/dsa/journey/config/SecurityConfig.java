@@ -35,7 +35,9 @@ public class SecurityConfig {
             "http://127.0.0.1:*", 
             "chrome-extension://*", 
             "https://leetcode.com", 
-            "https://www.leetcode.com"
+            "https://www.leetcode.com",
+            "https://*.vercel.app",
+            "https://*.netlify.app"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
