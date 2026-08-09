@@ -9,5 +9,5 @@ class JourneyApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
+

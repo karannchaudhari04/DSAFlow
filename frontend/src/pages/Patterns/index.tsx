@@ -48,6 +48,7 @@ export default function Patterns() {
         codeSnippet: problem.detail?.codeSnippet || '',
         complexityAnalysis: problem.detail?.complexityAnalysis,
         whatILearned: problem.detail?.whatILearned,
+        purpose: problem.purpose,
         mistakes: problem.mistakes.map(m => ({
           description: m.description,
           correctUnderstanding: m.correctUnderstanding,
@@ -201,6 +202,7 @@ export default function Patterns() {
                               <th style={{ width: '60px', textAlign: 'center' }}>Solved</th>
                               <th>Problem</th>
                               <th>Practice</th>
+                              <th>Purpose / Pattern</th>
                               <th>Level</th>
                               <th style={{ width: '80px', textAlign: 'center' }}>Detail</th>
                             </tr>
@@ -234,6 +236,9 @@ export default function Patterns() {
                                     >
                                       &lt;/&gt;
                                     </a>
+                                  </td>
+                                  <td style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                                    {prob.purpose || '-'}
                                   </td>
                                   <td>
                                     <span className={`difficulty-badge ${prob.difficulty.toLowerCase()}`}>

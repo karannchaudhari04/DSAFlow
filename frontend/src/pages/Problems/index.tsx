@@ -214,6 +214,12 @@ export default function Problems() {
                           <div className="problem-expanded-detail">
                             <div className="detail-grid">
                               <div className="detail-col">
+                                {problem.purpose && (
+                                  <>
+                                    <h4 style={{ color: 'var(--text-secondary)' }}>Purpose / Pattern</h4>
+                                    <p style={{ fontWeight: '500', color: 'var(--accent-cyan, #00f2fe)' }}>{problem.purpose}</p>
+                                  </>
+                                )}
                                 <h4>Core Intuition</h4>
                                 <p>{problem.detail?.intuition || 'No intuition logged.'}</p>
 

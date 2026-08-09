@@ -19,5 +19,5 @@ public interface ProblemRepository extends JpaRepository<Problem, UUID> {
 
     List<Problem> findByPatternId(UUID patternId);
     List<Problem> findByStatus(String status);
-    Optional<Problem> findByLeetcodeNumber(Integer leetcodeNumber);
+    List<Problem> findByLeetcodeNumber(Integer leetcodeNumber);
 }

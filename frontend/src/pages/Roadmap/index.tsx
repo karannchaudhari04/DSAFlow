@@ -58,6 +58,7 @@ export default function Roadmap() {
         codeSnippet: problem.detail?.codeSnippet || '',
         complexityAnalysis: problem.detail?.complexityAnalysis,
         whatILearned: problem.detail?.whatILearned,
+        purpose: problem.purpose,
         mistakes: problem.mistakes.map(m => ({
           description: m.description,
           correctUnderstanding: m.correctUnderstanding,
@@ -170,144 +171,319 @@ export default function Roadmap() {
                 <div className="accordion-content">
                   {phase.patterns.length > 0 ? (
                     <div className="subtopics-list">
-                      {phase.patterns
-                        .sort((a, b) => a.sequenceOrder - b.sequenceOrder)
-                        .map((pattern) => {
-                          const patternProblems = problems?.filter(p => p.pattern.id === pattern.id) || [];
-                          const solvedCount = patternProblems.filter(p => p.status === 'COMPLETED' || p.status === 'MASTERED').length;
-                          const totalCount = patternProblems.length;
-                          const percent = totalCount > 0 ? (solvedCount / totalCount) * 100 : 0;
-                          const isPatternOpen = !!openPatternIds[pattern.id];
+                      {phase.phaseNumber === 4 ? (
+                        (() => {
+                          const renderPatternCard = (pattern: any) => {
+                            if (!pattern) return null;
+                            const patternProblems = problems?.filter(p => p.pattern.id === pattern.id) || [];
+                            const solvedCount = patternProblems.filter(p => p.status === 'COMPLETED' || p.status === 'MASTERED').length;
+                            const totalCount = patternProblems.length;
+                            const percent = totalCount > 0 ? (solvedCount / totalCount) * 100 : 0;
+                            const isPatternOpen = !!openPatternIds[pattern.id];
 
-                          return (
-                            <div key={pattern.id} className={`subtopic-section ${isPatternOpen ? 'open' : ''}`}>
-                              {/* Subtopic Accordion Header */}
-                              <div 
-                                className="subtopic-accordion-header"
-                                onClick={(e) => togglePattern(pattern.id, e)}
-                              >
-                                <div className="subtopic-header-left">
-                                  <span className="subtopic-chevron">{isPatternOpen ? '▼' : '▶'}</span>
-                                  <h4 className="subtopic-title">{pattern.name}</h4>
-                                  <button 
-                                    className="btn btn-ghost btn-xs add-problem-btn"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      openQuickAdd(pattern.id);
-                                    }}
-                                  >
-                                    + Log
-                                  </button>
-                                </div>
-                                <div className="subtopic-header-right">
-                                  <div className="subtopic-progress-bar-wrapper">
-                                    <div className="subtopic-progress-bar" style={{ width: `${percent}%` }}></div>
+                            return (
+                              <div key={pattern.id} className={`subtopic-section ${isPatternOpen ? 'open' : ''}`}>
+                                <div 
+                                  className="subtopic-accordion-header"
+                                  onClick={(e) => togglePattern(pattern.id, e)}
+                                >
+                                  <div className="subtopic-header-left">
+                                    <span className="subtopic-chevron">{isPatternOpen ? '▼' : '▶'}</span>
+                                    <h4 className="subtopic-title">{pattern.name}</h4>
+                                    <button 
+                                      className="btn btn-ghost btn-xs add-problem-btn"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        openQuickAdd(pattern.id);
+                                      }}
+                                    >
+                                      + Log
+                                    </button>
                                   </div>
-                                  <span className="subtopic-progress-ratio">
-                                    {solvedCount} / {totalCount}
-                                  </span>
+                                  <div className="subtopic-header-right">
+                                    <div className="subtopic-progress-bar-wrapper">
+                                      <div className="subtopic-progress-bar" style={{ width: `${percent}%` }}></div>
+                                    </div>
+                                    <span className="subtopic-progress-ratio">
+                                      {solvedCount} / {totalCount}
+                                    </span>
+                                  </div>
                                 </div>
-                              </div>
 
-                              {/* Subtopic Expandable Content */}
-                              {isPatternOpen && (
-                                <div className="subtopic-accordion-content">
-                                  {pattern.description && (
-                                    <p className="subtopic-description">{pattern.description}</p>
-                                  )}
+                                {isPatternOpen && (
+                                  <div className="subtopic-accordion-content">
+                                    {pattern.description && (
+                                      <p className="subtopic-description">{pattern.description}</p>
+                                    )}
 
-                                  {patternProblems.length > 0 ? (
-                                    <div className="problems-table-wrapper">
-                                      <table className="roadmap-problems-table">
-                                        <thead>
-                                          {phase.phaseNumber === 0 || phase.phaseNumber === 1 ? (
-                                            <tr>
-                                              <th style={{ width: '110px', textAlign: 'center' }}>Completed</th>
-                                              <th>Subtopic</th>
-                                              <th style={{ width: '100px', textAlign: 'center' }}>Resource</th>
-                                              <th style={{ width: '120px', textAlign: 'center' }}>Level</th>
-                                            </tr>
-                                          ) : (
+                                    {patternProblems.length > 0 ? (
+                                      <div className="problems-table-wrapper">
+                                        <table className="roadmap-problems-table">
+                                          <thead>
                                             <tr>
                                               <th style={{ width: '60px', textAlign: 'center' }}></th>
                                               <th>Problem</th>
                                               <th style={{ width: '100px', textAlign: 'center' }}>Practice</th>
+                                              <th>Purpose / Pattern</th>
                                               <th style={{ width: '120px', textAlign: 'center' }}>Level</th>
                                             </tr>
-                                          )}
-                                        </thead>
-                                        <tbody>
-                                          {patternProblems.map((prob) => {
-                                            const isCompleted = prob.status === 'COMPLETED' || prob.status === 'MASTERED';
-                                            const isFoundation = phase.phaseNumber === 0 || phase.phaseNumber === 1;
-                                            return (
-                                              <tr key={prob.id} className={isCompleted ? 'row-completed' : ''}>
-                                                <td style={{ textAlign: 'center' }}>
-                                                  <button 
-                                                    className={`circle-checkbox-btn ${isCompleted ? 'checked' : ''}`}
-                                                    onClick={() => toggleProblemCompleted.mutate(prob)}
-                                                    disabled={toggleProblemCompleted.isPending}
-                                                    title={isCompleted ? "Mark In Progress" : "Mark Completed"}
-                                                  >
-                                                    {isCompleted ? <span className="checkmark-inner">✓</span> : null}
-                                                  </button>
-                                                </td>
-                                                <td className="problem-title-cell">
-                                                  <a 
-                                                    href={getAbsoluteUrl(prob.url)} 
-                                                    target="_blank" 
-                                                    rel="noopener noreferrer" 
-                                                    className="problem-link"
-                                                  >
-                                                    {prob.name}
-                                                  </a>
-                                                </td>
-                                                <td style={{ textAlign: 'center' }}>
-                                                  {isFoundation ? (
+                                          </thead>
+                                          <tbody>
+                                            {patternProblems.map((prob) => {
+                                              const isCompleted = prob.status === 'COMPLETED' || prob.status === 'MASTERED';
+                                              return (
+                                                <tr key={prob.id} className={isCompleted ? 'row-completed' : ''}>
+                                                  <td style={{ textAlign: 'center' }}>
+                                                    <button 
+                                                      className={`circle-checkbox-btn ${isCompleted ? 'checked' : ''}`}
+                                                      onClick={() => toggleProblemCompleted.mutate(prob)}
+                                                      disabled={toggleProblemCompleted.isPending}
+                                                      title={isCompleted ? "Mark In Progress" : "Mark Completed"}
+                                                    >
+                                                      {isCompleted ? <span className="checkmark-inner">✓</span> : null}
+                                                    </button>
+                                                  </td>
+                                                  <td className="problem-title-cell">
                                                     <a 
                                                       href={getAbsoluteUrl(prob.url)} 
                                                       target="_blank" 
                                                       rel="noopener noreferrer" 
-                                                      className="resource-youtube-btn"
-                                                      title="Watch Video / Read Theory"
+                                                      className="problem-link"
                                                     >
-                                                      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                                                        <path d="M8 5v14l11-7z"/>
-                                                      </svg>
+                                                      {prob.name}
                                                     </a>
-                                                  ) : (
+                                                  </td>
+                                                  <td style={{ textAlign: 'center' }}>
                                                     <a 
                                                       href={getAbsoluteUrl(prob.url)} 
                                                       target="_blank" 
                                                       rel="noopener noreferrer" 
                                                       className="practice-code-btn"
-                                                      title="Solve on LeetCode"
+                                                      title="Solve problem"
                                                     >
                                                       &lt;/&gt;
                                                     </a>
-                                                  )}
-                                                </td>
-                                                <td style={{ textAlign: 'center' }}>
-                                                  <span className={`difficulty-badge ${prob.difficulty.toLowerCase()}`}>
-                                                    {prob.difficulty}
-                                                  </span>
-                                                </td>
-                                              </tr>
-                                            );
-                                          })}
-                                        </tbody>
-                                      </table>
-                                    </div>
-                                  ) : (
-                                    <div className="empty-subtopic-state">
-                                      <p>{phase.phaseNumber === 0 || phase.phaseNumber === 1 ? 'No theory resources logged for this subtopic yet.' : 'No practice problems logged for this subtopic yet.'}</p>
-                                    </div>
-                                  )}
+                                                  </td>
+                                                  <td className="purpose-cell" style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                                                    {prob.purpose || '-'}
+                                                  </td>
+                                                  <td style={{ textAlign: 'center' }}>
+                                                    <span className={`difficulty-badge ${prob.difficulty.toLowerCase()}`}>
+                                                      {prob.difficulty}
+                                                    </span>
+                                                  </td>
+                                                </tr>
+                                              );
+                                            })}
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    ) : (
+                                      <div className="empty-subtopic-state">
+                                        <p>No practice problems logged for this subtopic yet.</p>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          };
+
+                          const linearSearchPattern = phase.patterns.find(p => p.id === 'a0a00000-0000-0000-0000-000000000401');
+
+                          const binarySearchPatterns = phase.patterns
+                            .filter(p => [
+                              'a0a00000-0000-0000-0000-000000000402',
+                              'a0a00000-0000-0000-0000-000000000403',
+                              'a0a00000-0000-0000-0000-000000000404',
+                              'a0a00000-0000-0000-0000-000000000405',
+                              'a0a00000-0000-0000-0000-000000000406'
+                            ].includes(p.id))
+                            .sort((a, b) => a.sequenceOrder - b.sequenceOrder);
+
+                          const sortingPatterns = phase.patterns
+                            .filter(p => [
+                              'a0a00000-0000-0000-0000-000000000407',
+                              'a0a00000-0000-0000-0000-000000000408',
+                              'a0a00000-0000-0000-0000-000000000409',
+                              'a0a00000-0000-0000-0000-000000000410',
+                              'a0a00000-0000-0000-0000-000000000411',
+                              'a0a00000-0000-0000-0000-000000000412',
+                              'a0a00000-0000-0000-0000-000000000413',
+                              'a0a00000-0000-0000-0000-000000000414'
+                            ].includes(p.id))
+                            .sort((a, b) => a.sequenceOrder - b.sequenceOrder);
+
+                          return (
+                            <div className="phase4-hierarchical-list" style={{ width: '100%' }}>
+                              {/* Linear Search Section */}
+                              {renderPatternCard(linearSearchPattern)}
+
+                              {/* Binary Search Group */}
+                              <div className="subtopic-group-wrapper">
+                                <div className="subtopic-group-header">
+                                  <span className="group-connector-line"></span>
+                                  <span className="group-icon-bullet">🔍</span>
+                                  <h3>Binary Search</h3>
                                 </div>
-                              )}
+                                <div className="subtopic-group-children">
+                                  {binarySearchPatterns.map(renderPatternCard)}
+                                </div>
+                              </div>
+
+                              {/* Sorting Group */}
+                              <div className="subtopic-group-wrapper">
+                                <div className="subtopic-group-header">
+                                  <span className="group-connector-line"></span>
+                                  <span className="group-icon-bullet">⚡</span>
+                                  <h3>Sorting</h3>
+                                </div>
+                                <div className="subtopic-group-children">
+                                  {sortingPatterns.map(renderPatternCard)}
+                                </div>
+                              </div>
                             </div>
                           );
-                        })}
+                        })()
+                      ) : (
+                        phase.patterns
+                          .sort((a, b) => a.sequenceOrder - b.sequenceOrder)
+                          .map((pattern) => {
+                            const patternProblems = problems?.filter(p => p.pattern.id === pattern.id) || [];
+                            const solvedCount = patternProblems.filter(p => p.status === 'COMPLETED' || p.status === 'MASTERED').length;
+                            const totalCount = patternProblems.length;
+                            const percent = totalCount > 0 ? (solvedCount / totalCount) * 100 : 0;
+                            const isPatternOpen = !!openPatternIds[pattern.id];
+                            const isFoundation = phase.phaseNumber === 0 || phase.phaseNumber === 1;
+
+                            return (
+                              <div key={pattern.id} className={`subtopic-section ${isPatternOpen ? 'open' : ''}`}>
+                                {/* Subtopic Accordion Header */}
+                                <div 
+                                  className="subtopic-accordion-header"
+                                  onClick={(e) => togglePattern(pattern.id, e)}
+                                >
+                                  <div className="subtopic-header-left">
+                                    <span className="subtopic-chevron">{isPatternOpen ? '▼' : '▶'}</span>
+                                    <h4 className="subtopic-title">{pattern.name}</h4>
+                                    <button 
+                                      className="btn btn-ghost btn-xs add-problem-btn"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        openQuickAdd(pattern.id);
+                                      }}
+                                    >
+                                      + Log
+                                    </button>
+                                  </div>
+                                  <div className="subtopic-header-right">
+                                    <div className="subtopic-progress-bar-wrapper">
+                                      <div className="subtopic-progress-bar" style={{ width: `${percent}%` }}></div>
+                                    </div>
+                                    <span className="subtopic-progress-ratio">
+                                      {solvedCount} / {totalCount}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                {/* Subtopic Expandable Content */}
+                                {isPatternOpen && (
+                                  <div className="subtopic-accordion-content">
+                                    {pattern.description && (
+                                      <p className="subtopic-description">{pattern.description}</p>
+                                    )}
+
+                                    {patternProblems.length > 0 ? (
+                                      <div className="problems-table-wrapper">
+                                        <table className="roadmap-problems-table">
+                                          <thead>
+                                            <tr>
+                                              <th style={{ width: '60px', textAlign: 'center' }}></th>
+                                              <th>Problem</th>
+                                              <th style={{ width: '100px', textAlign: 'center' }}>{isFoundation ? 'Resource' : 'Practice'}</th>
+                                              {!isFoundation && <th>Purpose / Pattern</th>}
+                                              <th style={{ width: '120px', textAlign: 'center' }}>Level</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            {patternProblems.map((prob) => {
+                                              const isCompleted = prob.status === 'COMPLETED' || prob.status === 'MASTERED';
+                                              return (
+                                                <tr key={prob.id} className={isCompleted ? 'row-completed' : ''}>
+                                                  <td style={{ textAlign: 'center' }}>
+                                                    <button 
+                                                      className={`circle-checkbox-btn ${isCompleted ? 'checked' : ''}`}
+                                                      onClick={() => toggleProblemCompleted.mutate(prob)}
+                                                      disabled={toggleProblemCompleted.isPending}
+                                                      title={isCompleted ? "Mark In Progress" : "Mark Completed"}
+                                                    >
+                                                      {isCompleted ? <span className="checkmark-inner">✓</span> : null}
+                                                    </button>
+                                                  </td>
+                                                  <td className="problem-title-cell">
+                                                    <a 
+                                                      href={getAbsoluteUrl(prob.url)} 
+                                                      target="_blank" 
+                                                      rel="noopener noreferrer" 
+                                                      className="problem-link"
+                                                    >
+                                                      {prob.name}
+                                                    </a>
+                                                  </td>
+                                                  <td style={{ textAlign: 'center' }}>
+                                                    {isFoundation ? (
+                                                      prob.url && prob.url !== '#' ? (
+                                                        <a 
+                                                          href={getAbsoluteUrl(prob.url)} 
+                                                          target="_blank" 
+                                                          rel="noopener noreferrer" 
+                                                          className="resource-docs-btn"
+                                                          title="Open resource"
+                                                        >
+                                                          📖 Docs
+                                                        </a>
+                                                      ) : (
+                                                        <span style={{ color: 'var(--text-muted)' }}>-</span>
+                                                      )
+                                                    ) : (
+                                                      <a 
+                                                        href={getAbsoluteUrl(prob.url)} 
+                                                        target="_blank" 
+                                                        rel="noopener noreferrer" 
+                                                        className="practice-code-btn"
+                                                        title="Solve problem"
+                                                      >
+                                                        &lt;/&gt;
+                                                      </a>
+                                                    )}
+                                                  </td>
+                                                  {!isFoundation && (
+                                                    <td className="purpose-cell" style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+                                                      {prob.purpose || '-'}
+                                                    </td>
+                                                  )}
+                                                  <td style={{ textAlign: 'center' }}>
+                                                    <span className={`difficulty-badge ${prob.difficulty.toLowerCase()}`}>
+                                                      {prob.difficulty}
+                                                    </span>
+                                                  </td>
+                                                </tr>
+                                              );
+                                            })}
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    ) : (
+                                      <div className="empty-subtopic-state">
+                                        <p>{isFoundation ? 'No theory resources logged for this subtopic yet.' : 'No practice problems logged for this subtopic yet.'}</p>
+                                      </div>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })
+                      )}
                     </div>
                   ) : (
                     <div className="empty-topic-state">

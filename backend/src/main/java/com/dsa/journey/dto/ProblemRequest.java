@@ -18,6 +18,7 @@ public class ProblemRequest {
     private Integer attemptsCount;
     private Boolean independentSolve;
     private UUID patternId;
+    private String purpose;
     
     // Details
     private String intuition;

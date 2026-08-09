@@ -29,6 +29,7 @@ interface FormValues {
   codeSnippet: string;
   complexityAnalysis?: string;
   whatILearned?: string;
+  purpose?: string;
   mistakes: Array<{
     description: string;
     correctUnderstanding: string;
@@ -68,6 +69,7 @@ export default function ProblemFormModal({ isOpen, onClose, editProblem, default
       codeSnippet: '',
       complexityAnalysis: '',
       whatILearned: '',
+      purpose: '',
       mistakes: [],
     },
   });
@@ -96,6 +98,7 @@ export default function ProblemFormModal({ isOpen, onClose, editProblem, default
         codeSnippet: editProblem.detail?.codeSnippet || '',
         complexityAnalysis: editProblem.detail?.complexityAnalysis || '',
         whatILearned: editProblem.detail?.whatILearned || '',
+        purpose: editProblem.purpose || '',
         mistakes: editProblem.mistakes?.map((m) => ({
           description: m.description,
           correctUnderstanding: m.correctUnderstanding,
@@ -119,6 +122,7 @@ export default function ProblemFormModal({ isOpen, onClose, editProblem, default
         codeSnippet: '',
         complexityAnalysis: '',
         whatILearned: '',
+        purpose: '',
         mistakes: [],
       });
     }
@@ -267,6 +271,16 @@ export default function ProblemFormModal({ isOpen, onClose, editProblem, default
               {...register('attemptsCount', { min: 1 })}
             />
           </div>
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Purpose / Pattern</label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="e.g., Digit counting + traversal"
+            {...register('purpose')}
+          />
         </div>
 
         <div className="form-group checkbox-group">

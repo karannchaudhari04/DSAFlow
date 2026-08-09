@@ -62,6 +62,7 @@ export interface Problem {
   independentSolve: boolean;
   pattern: Pattern;
   detail: ProblemDetail;
+  purpose?: string;
   mistakes: Mistake[];
   createdAt: string;
   updatedAt: string;
@@ -89,6 +90,7 @@ export interface ProblemRequest {
   codeSnippet: string;
   complexityAnalysis?: string;
   whatILearned?: string;
+  purpose?: string;
   mistakes?: MistakeRequest[];
 }
 

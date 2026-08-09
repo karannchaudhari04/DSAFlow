@@ -61,6 +61,7 @@ public class ProblemService {
                 .independentSolve(request.getIndependentSolve() != null ? request.getIndependentSolve() : true)
                 .leetcodeVerified(false)
                 .pattern(pattern)
+                .purpose(request.getPurpose())
                 .build();
 
         ProblemDetail detail = ProblemDetail.builder()
@@ -125,6 +126,7 @@ public class ProblemService {
         problem.setAttemptsCount(request.getAttemptsCount() != null ? request.getAttemptsCount() : 1);
         problem.setIndependentSolve(request.getIndependentSolve() != null ? request.getIndependentSolve() : true);
         problem.setPattern(pattern);
+        problem.setPurpose(request.getPurpose());
 
         // Update Detail
         ProblemDetail detail = problem.getDetail();
@@ -194,15 +196,16 @@ public class ProblemService {
                 .orElseThrow(() -> new IllegalArgumentException("No patterns exist in database. Make sure migrations have run.")));
 
         for (com.dsa.journey.dto.ProblemSyncRequest req : syncRequests) {
-            java.util.Optional<Problem> existingOpt = problemRepository.findByLeetcodeNumber(req.getLeetcodeNumber());
+            List<Problem> existingList = problemRepository.findByLeetcodeNumber(req.getLeetcodeNumber());
 
-            if (existingOpt.isPresent()) {
-                Problem existing = existingOpt.get();
-                existing.setLeetcodeVerified(true);
-                if (!"MASTERED".equals(existing.getStatus())) {
-                    existing.setStatus("COMPLETED");
+            if (!existingList.isEmpty()) {
+                for (Problem existing : existingList) {
+                    existing.setLeetcodeVerified(true);
+                    if (!"MASTERED".equals(existing.getStatus())) {
+                        existing.setStatus("COMPLETED");
+                    }
+                    problemRepository.save(existing);
                 }
-                problemRepository.save(existing);
             } else {
                 Problem problem = Problem.builder()
                         .leetcodeNumber(req.getLeetcodeNumber())
