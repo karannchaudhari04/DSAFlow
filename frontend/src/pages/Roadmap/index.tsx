@@ -1,10 +1,18 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
 import { api } from '../../services/api';
 import type { Problem } from '../../services/api';
 import ProblemFormModal from '../../components/problems/ProblemFormModal';
 import './Roadmap.css';
+
+const getAbsoluteUrl = (url: string) => {
+  if (!url) return '';
+  const trimmed = url.trim();
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed;
+  }
+  return `https://${trimmed}`;
+};
 
 export default function Roadmap() {
   const queryClient = useQueryClient();
@@ -212,53 +220,77 @@ export default function Roadmap() {
                                     <div className="problems-table-wrapper">
                                       <table className="roadmap-problems-table">
                                         <thead>
-                                          <tr>
-                                            <th style={{ width: '60px', textAlign: 'center' }}>Solved</th>
-                                            <th>Problem</th>
-                                            <th>Practice</th>
-                                            <th>Level</th>
-                                            <th style={{ width: '120px', textAlign: 'center' }}>Detail</th>
-                                          </tr>
+                                          {phase.phaseNumber === 0 || phase.phaseNumber === 1 ? (
+                                            <tr>
+                                              <th style={{ width: '110px', textAlign: 'center' }}>Completed</th>
+                                              <th>Subtopic</th>
+                                              <th style={{ width: '100px', textAlign: 'center' }}>Resource</th>
+                                              <th style={{ width: '120px', textAlign: 'center' }}>Level</th>
+                                            </tr>
+                                          ) : (
+                                            <tr>
+                                              <th style={{ width: '60px', textAlign: 'center' }}></th>
+                                              <th>Problem</th>
+                                              <th style={{ width: '100px', textAlign: 'center' }}>Practice</th>
+                                              <th style={{ width: '120px', textAlign: 'center' }}>Level</th>
+                                            </tr>
+                                          )}
                                         </thead>
                                         <tbody>
                                           {patternProblems.map((prob) => {
                                             const isCompleted = prob.status === 'COMPLETED' || prob.status === 'MASTERED';
+                                            const isFoundation = phase.phaseNumber === 0 || phase.phaseNumber === 1;
                                             return (
                                               <tr key={prob.id} className={isCompleted ? 'row-completed' : ''}>
                                                 <td style={{ textAlign: 'center' }}>
-                                                  <input 
-                                                    type="checkbox"
-                                                    className="solved-checkbox"
-                                                    checked={isCompleted}
-                                                    onChange={() => toggleProblemCompleted.mutate(prob)}
+                                                  <button 
+                                                    className={`circle-checkbox-btn ${isCompleted ? 'checked' : ''}`}
+                                                    onClick={() => toggleProblemCompleted.mutate(prob)}
                                                     disabled={toggleProblemCompleted.isPending}
-                                                  />
+                                                    title={isCompleted ? "Mark In Progress" : "Mark Completed"}
+                                                  >
+                                                    {isCompleted ? <span className="checkmark-inner">✓</span> : null}
+                                                  </button>
                                                 </td>
                                                 <td className="problem-title-cell">
-                                                  <Link to={`/problems/${prob.id}`} className="problem-link">
-                                                    #{prob.leetcodeNumber} - {prob.name}
-                                                  </Link>
-                                                </td>
-                                                <td>
                                                   <a 
-                                                    href={prob.url} 
+                                                    href={getAbsoluteUrl(prob.url)} 
                                                     target="_blank" 
                                                     rel="noopener noreferrer" 
-                                                    className="practice-code-btn"
-                                                    title="Solve on LeetCode"
+                                                    className="problem-link"
                                                   >
-                                                    &lt;/&gt;
+                                                    {prob.name}
                                                   </a>
                                                 </td>
-                                                <td>
+                                                <td style={{ textAlign: 'center' }}>
+                                                  {isFoundation ? (
+                                                    <a 
+                                                      href={getAbsoluteUrl(prob.url)} 
+                                                      target="_blank" 
+                                                      rel="noopener noreferrer" 
+                                                      className="resource-youtube-btn"
+                                                      title="Watch Video / Read Theory"
+                                                    >
+                                                      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                                                        <path d="M8 5v14l11-7z"/>
+                                                      </svg>
+                                                    </a>
+                                                  ) : (
+                                                    <a 
+                                                      href={getAbsoluteUrl(prob.url)} 
+                                                      target="_blank" 
+                                                      rel="noopener noreferrer" 
+                                                      className="practice-code-btn"
+                                                      title="Solve on LeetCode"
+                                                    >
+                                                      &lt;/&gt;
+                                                    </a>
+                                                  )}
+                                                </td>
+                                                <td style={{ textAlign: 'center' }}>
                                                   <span className={`difficulty-badge ${prob.difficulty.toLowerCase()}`}>
                                                     {prob.difficulty}
                                                   </span>
-                                                </td>
-                                                <td style={{ textAlign: 'center' }}>
-                                                  <Link to={`/problems/${prob.id}`} className="btn btn-ghost btn-xs">
-                                                    View
-                                                  </Link>
                                                 </td>
                                               </tr>
                                             );
@@ -268,7 +300,7 @@ export default function Roadmap() {
                                     </div>
                                   ) : (
                                     <div className="empty-subtopic-state">
-                                      <p>No practice problems logged for this subtopic yet.</p>
+                                      <p>{phase.phaseNumber === 0 || phase.phaseNumber === 1 ? 'No theory resources logged for this subtopic yet.' : 'No practice problems logged for this subtopic yet.'}</p>
                                     </div>
                                   )}
                                 </div>

@@ -441,3 +441,61 @@
   text-align: center;
   gap: 0.5rem;
 }
+
+/* Circle Checkbox styling matching screenshot */
+.circle-checkbox-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  background: transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: transparent;
+  transition: all 0.2s ease;
+}
+
+.circle-checkbox-btn:hover {
+  border-color: var(--primary);
+  background-color: rgba(99, 102, 241, 0.15);
+}
+
+.circle-checkbox-btn.checked {
+  border-color: #10b981;
+  background-color: #10b981;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.checkmark-inner {
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* YouTube Resource Button styling matching screenshot */
+.resource-youtube-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.resource-youtube-btn:hover {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border-color: #ef4444;
+  transform: scale(1.05);
+}

@@ -44,8 +44,9 @@ public class ProblemService {
         boolean isMarkingSolved = "COMPLETED".equalsIgnoreCase(newStatus) || 
                                   "MASTERED".equalsIgnoreCase(newStatus) || 
                                   "REVISION_SCHEDULED".equalsIgnoreCase(newStatus);
-        if (isMarkingSolved) {
-            throw new IllegalArgumentException("Cannot manually create a solved problem. Please solve it on LeetCode and sync it using the Chrome extension first!");
+        boolean isLeetCode = request.getUrl() != null && request.getUrl().contains("leetcode.com");
+        if (isLeetCode && isMarkingSolved) {
+            throw new IllegalArgumentException("Please solve this on LeetCode first!");
         }
 
         Problem problem = Problem.builder()
@@ -104,9 +105,10 @@ public class ProblemService {
         boolean isMarkingSolved = "COMPLETED".equalsIgnoreCase(newStatus) || 
                                   "MASTERED".equalsIgnoreCase(newStatus) || 
                                   "REVISION_SCHEDULED".equalsIgnoreCase(newStatus);
+        boolean isLeetCode = problem.getUrl() != null && problem.getUrl().contains("leetcode.com");
         
-        if (isMarkingSolved && !Boolean.TRUE.equals(problem.getLeetcodeVerified())) {
-            throw new IllegalArgumentException("This problem has not been verified on LeetCode. Please solve it on LeetCode and sync it using the Chrome extension first!");
+        if (isLeetCode && isMarkingSolved && !Boolean.TRUE.equals(problem.getLeetcodeVerified())) {
+            throw new IllegalArgumentException("Please solve this on LeetCode first!");
         }
 
         if ("NOT_STARTED".equalsIgnoreCase(newStatus) || "IN_PROGRESS".equalsIgnoreCase(newStatus)) {
