@@ -1,0 +1,129 @@
+.mistakes-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.mistakes-filter-bar {
+  padding: 1rem !important;
+  max-width: 300px;
+  width: 100%;
+}
+
+.mistakes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .mistakes-grid {
+    grid-template-columns: 1fr;
+  }
+  .mistakes-filter-bar {
+    max-width: 100%;
+  }
+}
+
+/* Mistake Card */
+.mistake-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.mistake-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.75rem;
+}
+
+.mistake-pattern-tag {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary);
+  background-color: var(--primary-light);
+  border: 1px solid var(--primary-border);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.mistake-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 50px;
+}
+
+.mistake-badge.resolved {
+  background-color: var(--success-light);
+  color: var(--success);
+  border: 1px solid var(--success-border);
+}
+
+.mistake-badge.unresolved {
+  background-color: var(--error-light);
+  color: var(--error);
+  border: 1px solid var(--error-border);
+}
+
+/* Mistake Body */
+.mistake-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+}
+
+.mistake-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.section-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.section-label.incorrect {
+  color: var(--error);
+}
+
+.section-label.correct {
+  color: var(--success);
+}
+
+.section-text {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+/* Footer */
+.mistake-footer {
+  border-top: 1px solid var(--border-color);
+  padding-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mistake-meta {
+  display: flex;
+  gap: 1.5rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.mistake-meta code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--text-secondary);
+}

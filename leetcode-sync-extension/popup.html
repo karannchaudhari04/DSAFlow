@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      width: 280px;
+      padding: 1.5rem;
+      background-color: #0d0e15;
+      color: #f3f4f6;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      margin: 0;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .logo-text {
+      font-size: 1.1rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .desc {
+      font-size: 0.85rem;
+      color: #9ca3af;
+      line-height: 1.4;
+      margin-bottom: 1.5rem;
+    }
+    .sync-btn {
+      width: 100%;
+      padding: 0.75rem;
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .sync-btn:hover {
+      opacity: 0.9;
+    }
+    .sync-btn:disabled {
+      background: #374151;
+      color: #9ca3af;
+      cursor: not-allowed;
+    }
+    .status-container {
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      text-align: center;
+      padding: 0.5rem;
+      border-radius: 6px;
+      background-color: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      display: none;
+    }
+    .status-success {
+      color: #10b981;
+      border-color: rgba(16, 185, 129, 0.2);
+      background-color: rgba(16, 185, 129, 0.05);
+    }
+    .status-error {
+      color: #ef4444;
+      border-color: rgba(239, 68, 68, 0.2);
+      background-color: rgba(239, 68, 68, 0.05);
+    }
+    .footer {
+      margin-top: 1.5rem;
+      font-size: 0.75rem;
+      color: #6b7280;
+      text-align: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <span class="logo-text">LeetCode Sync Pipeline</span>
+  </div>
+  <p class="desc">
+    Syncs completed LeetCode submissions automatically when solving, or trigger a full historical sync below.
+  </p>
+  <button id="sync-history-btn" class="sync-btn">Sync Past Solved Problems</button>
+  
+  <div id="status-box" class="status-container"></div>
+  
+  <div class="footer">
+    Make sure your local server is running on port 8080.
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

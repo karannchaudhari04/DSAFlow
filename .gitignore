@@ -1,0 +1,39 @@
+# Environment & Secrets
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+backend-*.log
+logs/
+
+# Node & Frontend
+node_modules/
+dist/
+build/
+.vite/
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+
+# Java & Gradle (Backend)
+.gradle/
+build/
+out/
+backend/.gradle/
+backend/build/
+backend/out/
+backend/bin/
+
+# IDE & Editor files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+*.swp
+
+# OS generated files
+.DS_Store
+Thumbs.db
