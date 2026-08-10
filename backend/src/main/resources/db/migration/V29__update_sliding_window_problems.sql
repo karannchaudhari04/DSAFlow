@@ -1,20 +1,14 @@
 -- V29: Update Sliding Window subtopics and seed problems idempotently
 
--- 1. Ensure new patterns (0703, 0704, 0705, 0706) exist
+-- 1. Ensure all Sliding Window patterns exist and have correct titles/orders
 INSERT INTO patterns (id, phase_id, name, description, recognition_clues, intuition, generic_approach, time_complexity, space_complexity, common_mistakes, mastery_status, sequence_order) VALUES
+('a0a00000-0000-0000-0000-000000000701', 'b0a00000-0000-0000-0000-000000000007', 'Fixed-Size Sliding Window', 'Scanning continuous blocks of static lengths.', 'Subarrays of size K', 'Add new element, remove sliding tail element.', 'Iterate right pointer, update state, slide left pointer.', 'O(N)', 'O(1)', 'Incorrect bounds checking during initial window load', 'NOT_STARTED', 1),
+('a0a00000-0000-0000-0000-000000000702', 'b0a00000-0000-0000-0000-000000000007', 'Variable-Size Sliding Window', 'Scanning collections with dynamically growing or shrinking window bounds.', 'Subarrays matching condition constraints', 'Grow right pointer until condition violated, shrink left until valid.', 'Double pointer dynamic scan loops.', 'O(N)', 'O(1)', 'Wrong bounds updating.', 'NOT_STARTED', 2),
 ('a0a00000-0000-0000-0000-000000000703', 'b0a00000-0000-0000-0000-000000000007', 'Sliding Window + HashSet', 'Tracking dynamic unique constraints using window + set structures.', 'Subarray without duplicate items', 'Use set to detect duplicates, shrink left until duplicate is removed.', 'Standard sliding window + HashSet.', 'O(N)', 'O(N)', 'Incorrect left boundary cleanup.', 'NOT_STARTED', 3),
 ('a0a00000-0000-0000-0000-000000000704', 'b0a00000-0000-0000-0000-000000000007', 'Sliding Window + HashMap / Frequency', 'Validating custom permutations and constraints using element frequencies.', 'Anagram or permutation match constraints', 'Maintain char frequencies within window, validate count match.', 'Window scan with frequency array.', 'O(N)', 'O(1)', 'Failing to balance frequency maps.', 'NOT_STARTED', 4),
 ('a0a00000-0000-0000-0000-000000000705', 'b0a00000-0000-0000-0000-000000000007', 'At Most K / Distinct Elements', 'Evaluating subarrays containing at most K distinct keys.', 'Exactly or at most K items', 'Maintain distinct keys count, reduce window size on overflow.', 'Map counter with size checks.', 'O(N)', 'O(K)', 'Over-adjusting pointers.', 'NOT_STARTED', 5),
 ('a0a00000-0000-0000-0000-000000000706', 'b0a00000-0000-0000-0000-000000000007', 'Sliding Window + Counting', 'Counting valid subarrays matching target parameters.', 'Number of subarrays satisfying threshold', 'Compute running sums and frequencies within window boundaries.', 'Prefix count variation.', 'O(N)', 'O(N)', 'Negative count tracking.', 'NOT_STARTED', 6)
-ON CONFLICT (id) DO NOTHING;
-
--- 2. Update Sliding Window subtopics names and sequence orders
-UPDATE patterns SET name = 'Fixed-Size Sliding Window', sequence_order = 1 WHERE id = 'a0a00000-0000-0000-0000-000000000701';
-UPDATE patterns SET name = 'Variable-Size Sliding Window', sequence_order = 2 WHERE id = 'a0a00000-0000-0000-0000-000000000702';
-UPDATE patterns SET sequence_order = 3 WHERE id = 'a0a00000-0000-0000-0000-000000000703';
-UPDATE patterns SET sequence_order = 4 WHERE id = 'a0a00000-0000-0000-0000-000000000704';
-UPDATE patterns SET sequence_order = 5 WHERE id = 'a0a00000-0000-0000-0000-000000000705';
-UPDATE patterns SET sequence_order = 6 WHERE id = 'a0a00000-0000-0000-0000-000000000706';
+ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, sequence_order = EXCLUDED.sequence_order;
 
 -- 3. Seed Fixed-Size Sliding Window problems idempotently
 INSERT INTO problems (id, pattern_id, leetcode_number, name, url, difficulty, status, date_solved, time_taken_minutes, attempts_count, independent_solve, purpose)

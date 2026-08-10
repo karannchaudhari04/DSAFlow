@@ -1,22 +1,15 @@
 -- V31: Update Queue subtopics and seed problems idempotently
 
--- 1. Update existing Queue subtopics names and sequence orders first (to release unique names)
-UPDATE patterns SET name = 'Basic Queue', sequence_order = 1 WHERE id = 'a0a00000-0000-0000-0000-000000000901';
-UPDATE patterns SET name = 'Queue Simulation', sequence_order = 2 WHERE id = 'a0a00000-0000-0000-0000-000000000902';
-UPDATE patterns SET name = 'Deque', sequence_order = 3 WHERE id = 'a0a00000-0000-0000-0000-000000000903';
-UPDATE patterns SET name = 'Deque + Sliding Window', sequence_order = 4 WHERE id = 'a0a00000-0000-0000-0000-000000000904';
-
--- 2. Ensure new patterns (0905, 0906, 0907) exist
+-- 1. Ensure all Queue patterns exist and have correct titles/orders
 INSERT INTO patterns (id, phase_id, name, description, recognition_clues, intuition, generic_approach, time_complexity, space_complexity, common_mistakes, mastery_status, sequence_order) VALUES
+('a0a00000-0000-0000-0000-000000000901', 'b0a00000-0000-0000-0000-000000000009', 'Basic Queue', 'Exploring nodes level by level.', 'Shortest steps in grids', 'Use FIFO Queue to process nodes in level chunks.', 'Push source, while queue not empty, poll and push neighbors.', 'O(V + E)', 'O(V)', 'Queueing visited nodes repeatedly, causing memory exhaustion', 'NOT_STARTED', 1),
+('a0a00000-0000-0000-0000-000000000902', 'b0a00000-0000-0000-0000-000000000009', 'Queue Simulation', 'Simulating chronological processes or queues of actions.', 'Queue simulation processing', 'Simulate queue processing step-by-step.', 'Queue-based loop simulator.', 'O(N)', 'O(N)', 'None', 'NOT_STARTED', 2),
+('a0a00000-0000-0000-0000-000000000903', 'b0a00000-0000-0000-0000-000000000009', 'Deque', 'Double-ended queue operations allowing inserts and removals from both sides.', 'Symmetric inserts/deletions', 'Utilize Deque / ArrayDeque collection class.', 'Deque operations.', 'O(1)', 'O(N)', 'None', 'NOT_STARTED', 3),
+('a0a00000-0000-0000-0000-000000000904', 'b0a00000-0000-0000-0000-000000000009', 'Deque + Sliding Window', 'Using double-ended queues to optimize sliding window maximums or minimums.', 'Monotonic Deque bounds', 'Keep indices of elements in sorted order on Deque.', 'Monotonic Deque scan.', 'O(N)', 'O(K)', 'None', 'NOT_STARTED', 4),
 ('a0a00000-0000-0000-0000-000000000905', 'b0a00000-0000-0000-0000-000000000009', 'Circular Queue', 'Designing fixed-size buffers utilizing modulo arithmetic indices.', 'Fixed buffer space bounds', 'Circular indexing via modulo calculations.', 'Circular array indexing design.', 'O(1)', 'O(N)', 'Index underflow/overflow bounds.', 'NOT_STARTED', 5),
 ('a0a00000-0000-0000-0000-000000000906', 'b0a00000-0000-0000-0000-000000000009', 'Queue + BFS Preparation', 'Leveraging queues to perform breadth-first searches or level-order tree scans.', 'Shortest paths or layer levels scans', 'Queue nodes layer by layer.', 'BFS tree scan algorithm.', 'O(N)', 'O(W)', 'Infinite loop cycles.', 'NOT_STARTED', 6),
 ('a0a00000-0000-0000-0000-000000000907', 'b0a00000-0000-0000-0000-000000000009', 'Priority Queue / Heap Problems', 'Manipulating minimums/maximums dynamically using priority queues.', 'Top K elements or dynamically sorted collection', 'Use min/max-heap properties to select elements.', 'Priority queue element insertions.', 'O(N log K)', 'O(K)', 'Custom sorting mistakes.', 'NOT_STARTED', 7)
-ON CONFLICT (id) DO NOTHING;
-
--- 3. Set correct sequence orders for the new patterns
-UPDATE patterns SET sequence_order = 5 WHERE id = 'a0a00000-0000-0000-0000-000000000905';
-UPDATE patterns SET sequence_order = 6 WHERE id = 'a0a00000-0000-0000-0000-000000000906';
-UPDATE patterns SET sequence_order = 7 WHERE id = 'a0a00000-0000-0000-0000-000000000907';
+ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, sequence_order = EXCLUDED.sequence_order;
 
 -- 4. Seed Basic Queue problems idempotently
 INSERT INTO problems (id, pattern_id, leetcode_number, name, url, difficulty, status, date_solved, time_taken_minutes, attempts_count, independent_solve, purpose)

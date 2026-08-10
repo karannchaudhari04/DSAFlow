@@ -1,5 +1,15 @@
 -- V22: Seed String problems with correct purpose values and avoid duplicates
 
+-- Ensure String patterns exist and have correct titles/orders
+INSERT INTO patterns (id, phase_id, name, description, recognition_clues, intuition, generic_approach, time_complexity, space_complexity, common_mistakes, mastery_status, sequence_order) VALUES
+('a0a00000-0000-0000-0000-000000000301', 'b0a00000-0000-0000-0000-000000000003', 'String Traversal', 'Reading strings character by character.', 'Scanning inputs', 'Convert to charArray or use charAt(i).', 'Simple loop accessing character sequence.', 'O(N)', 'O(1)', 'Using slow concatenation operations', 'NOT_STARTED', 1),
+('a0a00000-0000-0000-0000-000000000302', 'b0a00000-0000-0000-0000-000000000003', 'Character Frequency', 'Tracking character occurrences and frequencies.', 'Char occurrences count', 'Maintain counter maps/arrays.', 'Loop string, increment frequency counts.', 'O(N)', 'O(1)', 'None', 'NOT_STARTED', 2),
+('a0a00000-0000-0000-0000-000000000303', 'b0a00000-0000-0000-0000-000000000003', 'Palindrome', 'Checking or constructing symmetric string properties.', 'Symmetric substrings', 'Expand around center or use two pointers.', 'Check elements symmetrically.', 'O(N)', 'O(1)', 'None', 'NOT_STARTED', 3),
+('a0a00000-0000-0000-0000-000000000304', 'b0a00000-0000-0000-0000-000000000003', 'StringBuilder', 'Stitching or building strings dynamically.', 'Dynamic string building', 'Use StringBuilder class for concatenation.', 'Loop and append to StringBuilder.', 'O(N)', 'O(N)', 'None', 'NOT_STARTED', 4),
+('a0a00000-0000-0000-0000-000000000305', 'b0a00000-0000-0000-0000-000000000003', 'Anagrams', 'Detecting and grouping anagram permutations.', 'Anagram groups', 'Sort word keys or map frequencies.', 'HashMap grouping of signatures.', 'O(N * L log L)', 'O(N * L)', 'None', 'NOT_STARTED', 5),
+('a0a00000-0000-0000-0000-000000000306', 'b0a00000-0000-0000-0000-000000000003', 'Basic String Manipulation', 'General string parsing and modifications.', 'General string manipulation', 'Use basic string methods and structures.', 'Character-by-character translation loops.', 'O(N)', 'O(1)', 'None', 'NOT_STARTED', 6)
+ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, sequence_order = EXCLUDED.sequence_order;
+
 -- 1. Update purposes of existing String problems in the database
 UPDATE problems SET purpose = 'Frequency counting' WHERE leetcode_number = 383;
 UPDATE problems SET purpose = 'String comparison' WHERE leetcode_number = 14;

@@ -1,11 +1,13 @@
 -- V27: Update Hashing subtopics names and seed missing problems idempotently
 
--- 1. Update Hashing subtopics names to match requested titles
-UPDATE patterns SET name = 'HashMap' WHERE id = 'a0a00000-0000-0000-0000-000000000501';
-UPDATE patterns SET name = 'HashSet' WHERE id = 'a0a00000-0000-0000-0000-000000000502';
-UPDATE patterns SET name = 'Frequency Counting' WHERE id = 'a0a00000-0000-0000-0000-000000000503';
-UPDATE patterns SET name = 'Duplicate Detection' WHERE id = 'a0a00000-0000-0000-0000-000000000504';
-UPDATE patterns SET name = 'Lookup Pattern' WHERE id = 'a0a00000-0000-0000-0000-000000000505';
+-- 1. Ensure Hashing subtopics exist and have correct titles/orders
+INSERT INTO patterns (id, phase_id, name, description, recognition_clues, intuition, generic_approach, time_complexity, space_complexity, common_mistakes, mastery_status, sequence_order) VALUES
+('a0a00000-0000-0000-0000-000000000501', 'b0a00000-0000-0000-0000-000000000005', 'HashMap', 'Tracking item frequencies or associations using hash maps.', 'Map lookup', 'HashMap mapping keys to values.', 'Key-value maps.', 'O(1)', 'O(N)', 'None', 'NOT_STARTED', 1),
+('a0a00000-0000-0000-0000-000000000502', 'b0a00000-0000-0000-0000-000000000005', 'HashSet', 'Tracking unique items using hash sets.', 'Uniqueness checking', 'HashSet lookup.', 'Unique values set.', 'O(1)', 'O(N)', 'None', 'NOT_STARTED', 2),
+('a0a00000-0000-0000-0000-000000000503', 'b0a00000-0000-0000-0000-000000000005', 'Frequency Counting', 'Counting frequency of occurrences.', 'Frequencies count', 'Frequency map arrays.', 'Counter arrays.', 'O(N)', 'O(K)', 'None', 'NOT_STARTED', 3),
+('a0a00000-0000-0000-0000-000000000504', 'b0a00000-0000-0000-0000-000000000005', 'Duplicate Detection', 'Finding duplicate values in collections.', 'Contains duplicate elements', 'Set detection.', 'Duplicate element detection.', 'O(N)', 'O(N)', 'None', 'NOT_STARTED', 4),
+('a0a00000-0000-0000-0000-000000000505', 'b0a00000-0000-0000-0000-000000000005', 'Lookup Pattern', 'Using maps for fast O(1) searches.', 'Two Sum or search pairs', 'Value mapping lookup.', 'Target key lookups.', 'O(1)', 'O(N)', 'None', 'NOT_STARTED', 5)
+ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, sequence_order = EXCLUDED.sequence_order;
 
 -- 2. Seed HashMap problems (idempotently: only insert if pattern_id + leetcode_number combo does not already exist)
 INSERT INTO problems (id, pattern_id, leetcode_number, name, url, difficulty, status, date_solved, time_taken_minutes, attempts_count, independent_solve, purpose)

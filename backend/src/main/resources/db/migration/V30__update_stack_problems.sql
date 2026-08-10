@@ -1,24 +1,16 @@
 -- V30: Update Stack subtopics and seed problems idempotently
 
--- 1. Update existing Stack subtopics names and sequence orders first (to release unique names)
-UPDATE patterns SET name = 'Basic Stack Operations', sequence_order = 1 WHERE id = 'a0a00000-0000-0000-0000-000000000801';
-UPDATE patterns SET name = 'Parentheses / Matching', sequence_order = 2 WHERE id = 'a0a00000-0000-0000-0000-000000000802';
-UPDATE patterns SET name = 'Stack + String', sequence_order = 3 WHERE id = 'a0a00000-0000-0000-0000-000000000803';
-UPDATE patterns SET name = 'Expression / Calculation', sequence_order = 4 WHERE id = 'a0a00000-0000-0000-0000-000000000804';
-
--- 2. Ensure new patterns (0805, 0806, 0807, 0808) exist
+-- 1. Ensure all Stack patterns exist and have correct titles/orders
 INSERT INTO patterns (id, phase_id, name, description, recognition_clues, intuition, generic_approach, time_complexity, space_complexity, common_mistakes, mastery_status, sequence_order) VALUES
+('a0a00000-0000-0000-0000-000000000801', 'b0a00000-0000-0000-0000-000000000008', 'Basic Stack Operations', 'Matching matching scopes or open elements.', 'Nested parenthesis strings', 'Push openings, pop and verify matching on closers.', 'Utilize Deque / ArrayDeque to perform stack check.', 'O(N)', 'O(N)', 'Forgetting stack isEmpty checks before peek/pop', 'NOT_STARTED', 1),
+('a0a00000-0000-0000-0000-000000000802', 'b0a00000-0000-0000-0000-000000000008', 'Parentheses / Matching', 'Matching opening and closing bracket boundaries.', 'Matching parentheses scopes', 'Push openings, pop and match on closing characters.', 'Stack verification loop.', 'O(N)', 'O(N)', 'None', 'NOT_STARTED', 2),
+('a0a00000-0000-0000-0000-000000000803', 'b0a00000-0000-0000-0000-000000000008', 'Stack + String', 'Using stack structures for character-by-character string accumulation.', 'String character swaps and adjacent deletions', 'Push characters, evaluate cancellation criteria.', 'Stack accumulation scanner.', 'O(N)', 'O(N)', 'None', 'NOT_STARTED', 3),
+('a0a00000-0000-0000-0000-000000000804', 'b0a00000-0000-0000-0000-000000000008', 'Expression / Calculation', 'Evaluating expressions (operators and operands) using stack priorities.', 'Postfix/Prefix calculation', 'Compute values using operator stack rules.', 'Expression stack evaluation.', 'O(N)', 'O(N)', 'None', 'NOT_STARTED', 4),
 ('a0a00000-0000-0000-0000-000000000805', 'b0a00000-0000-0000-0000-000000000008', 'Monotonic Stack', 'Maintaining elements in sorted order dynamically within stack structures.', 'Next greater or monotonic conditions', 'Keep elements in increasing/decreasing order on stack.', 'Stack with loop eviction checks.', 'O(N)', 'O(N)', 'Popping correct elements.', 'NOT_STARTED', 5),
 ('a0a00000-0000-0000-0000-000000000806', 'b0a00000-0000-0000-0000-000000000008', 'Next Greater / Next Smaller', 'Resolving indices of next larger or smaller items in arrays.', 'Distance to next larger/smaller item', 'Push array indices onto monotonic stack.', 'Index-based monotonic stack.', 'O(N)', 'O(N)', 'Not storing indices.', 'NOT_STARTED', 6),
 ('a0a00000-0000-0000-0000-000000000807', 'b0a00000-0000-0000-0000-000000000008', 'Histogram / Range Problems', 'Computing optimal ranges or rectangles over linear heights.', 'Largest rectangle bounds in graph', 'Calculate left/right boundaries using monotonic stack.', 'Boundary scans with stack.', 'O(N)', 'O(N)', 'Wrong boundary initialization.', 'NOT_STARTED', 7),
 ('a0a00000-0000-0000-0000-000000000808', 'b0a00000-0000-0000-0000-000000000008', 'Stack Simulation', 'Simulating physical interactions or actions using stack history.', 'Physics collision or backtracking simulation', 'Simulate process step-by-step using push/pop.', 'Linear stack simulation.', 'O(N)', 'O(N)', 'Missing boundary interactions.', 'NOT_STARTED', 8)
-ON CONFLICT (id) DO NOTHING;
-
--- 3. Set correct sequence orders for the new patterns
-UPDATE patterns SET sequence_order = 5 WHERE id = 'a0a00000-0000-0000-0000-000000000805';
-UPDATE patterns SET sequence_order = 6 WHERE id = 'a0a00000-0000-0000-0000-000000000806';
-UPDATE patterns SET sequence_order = 7 WHERE id = 'a0a00000-0000-0000-0000-000000000807';
-UPDATE patterns SET sequence_order = 8 WHERE id = 'a0a00000-0000-0000-0000-000000000808';
+ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, sequence_order = EXCLUDED.sequence_order;
 
 -- 4. Seed Basic Stack Operations problems idempotently
 INSERT INTO problems (id, pattern_id, leetcode_number, name, url, difficulty, status, date_solved, time_taken_minutes, attempts_count, independent_solve, purpose)

@@ -1,19 +1,14 @@
 -- V28: Update Two Pointers subtopics and seed problems idempotently
 
--- 1. Ensure new patterns (0604, 0605, 0606) exist
+-- 1. Ensure all Two Pointers patterns exist and have correct titles/orders
 INSERT INTO patterns (id, phase_id, name, description, recognition_clues, intuition, generic_approach, time_complexity, space_complexity, common_mistakes, mastery_status, sequence_order) VALUES
+('a0a00000-0000-0000-0000-000000000601', 'b0a00000-0000-0000-0000-000000000006', 'Opposite-End Pointers', 'pointers starting at edges moving inwards.', 'Sorted subarray comparisons', 'Initialize left pointer at 0 and right at end-1.', 'Adjust pointer based on conditions until they meet.', 'O(N)', 'O(1)', 'Infinite loops from missing increments', 'NOT_STARTED', 1),
+('a0a00000-0000-0000-0000-000000000602', 'b0a00000-0000-0000-0000-000000000006', 'Fast & Slow Pointers', 'pointers moving at different speeds to detect cycles or structure properties.', 'Cycles or midpoints search', 'Fast pointer moves twice as fast as slow pointer.', 'Use runner technique pointers.', 'O(N)', 'O(1)', 'Missing null checks on fast.next.', 'NOT_STARTED', 2),
+('a0a00000-0000-0000-0000-000000000603', 'b0a00000-0000-0000-0000-000000000006', 'Two Pointers + Sorting', 'pointers scan combined with sorting collections.', 'Pair sum search on unsorted arrays', 'Sort first, then apply opposite direction pointers.', 'Sort array, use low/high pointer loops.', 'O(N log N)', 'O(1)', 'Forgetting to sort original data.', 'NOT_STARTED', 3),
 ('a0a00000-0000-0000-0000-000000000604', 'b0a00000-0000-0000-0000-000000000006', 'In-Place Array Modification', 'Modifying array elements directly without using auxiliary space.', 'In-place array changes requested', 'Read/write pointers pointing to input and write states.', 'Adjust write pointer on conditions.', 'O(N)', 'O(1)', 'Off-by-one writes.', 'NOT_STARTED', 4),
 ('a0a00000-0000-0000-0000-000000000605', 'b0a00000-0000-0000-0000-000000000006', 'Palindrome Two Pointers', 'Verifying symmetric properties of a sequence using pointers starting at boundaries.', 'Palindrome patterns', 'Compare elements from both sides towards center.', 'Move pointers on matches, allow tolerance.', 'O(N)', 'O(1)', 'Ignoring non-alphanumeric chars.', 'NOT_STARTED', 5),
 ('a0a00000-0000-0000-0000-000000000606', 'b0a00000-0000-0000-0000-000000000006', 'Two Pointers + String Processing', 'Processing string elements dynamically using multiple indexes.', 'Dynamic string manipulation', 'Apply two pointer scans to manipulate strings.', 'Build simulated results or scan backwards.', 'O(N)', 'O(1)', 'Incorrect string index bounds.', 'NOT_STARTED', 6)
-ON CONFLICT (id) DO NOTHING;
-
--- 2. Update Two Pointers subtopics names and sequence orders
-UPDATE patterns SET name = 'Opposite-End Pointers', sequence_order = 1 WHERE id = 'a0a00000-0000-0000-0000-000000000601';
-UPDATE patterns SET name = 'Fast & Slow Pointers', sequence_order = 2 WHERE id = 'a0a00000-0000-0000-0000-000000000602';
-UPDATE patterns SET name = 'Two Pointers + Sorting', sequence_order = 3 WHERE id = 'a0a00000-0000-0000-0000-000000000603';
-UPDATE patterns SET sequence_order = 4 WHERE id = 'a0a00000-0000-0000-0000-000000000604';
-UPDATE patterns SET sequence_order = 5 WHERE id = 'a0a00000-0000-0000-0000-000000000605';
-UPDATE patterns SET sequence_order = 6 WHERE id = 'a0a00000-0000-0000-0000-000000000606';
+ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, sequence_order = EXCLUDED.sequence_order;
 
 -- 3. Seed Opposite-End Pointers problems idempotently
 INSERT INTO problems (id, pattern_id, leetcode_number, name, url, difficulty, status, date_solved, time_taken_minutes, attempts_count, independent_solve, purpose)

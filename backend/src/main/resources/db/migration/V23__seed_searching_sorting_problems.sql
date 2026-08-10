@@ -26,14 +26,16 @@ DELETE FROM patterns WHERE id IN (
 );
 
 -- 2. Rename remaining subtopics and set correct sequence order
-UPDATE patterns SET name = 'Classic Binary Search', sequence_order = 1 WHERE id = 'a0a00000-0000-0000-0000-000000000402';
-UPDATE patterns SET name = 'First / Last Occurrence', sequence_order = 2 WHERE id = 'a0a00000-0000-0000-0000-000000000403';
-UPDATE patterns SET name = 'Lower Bound / Upper Bound', sequence_order = 3 WHERE id = 'a0a00000-0000-0000-0000-000000000404';
-UPDATE patterns SET name = 'Binary Search on Answer', sequence_order = 4 WHERE id = 'a0a00000-0000-0000-0000-000000000406';
-UPDATE patterns SET name = 'Basic Sorting Algorithms', sequence_order = 5 WHERE id = 'a0a00000-0000-0000-0000-000000000407';
-UPDATE patterns SET name = 'Merge Sort', sequence_order = 6 WHERE id = 'a0a00000-0000-0000-0000-000000000410';
-UPDATE patterns SET name = 'Quick Sort', sequence_order = 7 WHERE id = 'a0a00000-0000-0000-0000-000000000411';
-UPDATE patterns SET name = 'Sorting-Based Problem Solving', sequence_order = 8 WHERE id = 'a0a00000-0000-0000-0000-000000000412';
+INSERT INTO patterns (id, phase_id, name, description, recognition_clues, intuition, generic_approach, time_complexity, space_complexity, common_mistakes, mastery_status, sequence_order) VALUES
+('a0a00000-0000-0000-0000-000000000402', 'b0a00000-0000-0000-0000-000000000004', 'Classic Binary Search', 'Binary search algorithm details.', '', '', '', 'O(log N)', 'O(1)', 'None', 'NOT_STARTED', 1),
+('a0a00000-0000-0000-0000-000000000403', 'b0a00000-0000-0000-0000-000000000403', 'First / Last Occurrence', 'First and last index boundaries.', '', '', '', 'O(log N)', 'O(1)', 'None', 'NOT_STARTED', 2),
+('a0a00000-0000-0000-0000-000000000404', 'b0a00000-0000-0000-0000-000000000004', 'Lower Bound / Upper Bound', 'Lower/upper bounds extraction.', '', '', '', 'O(log N)', 'O(1)', 'None', 'NOT_STARTED', 3),
+('a0a00000-0000-0000-0000-000000000406', 'b0a00000-0000-0000-0000-000000000004', 'Binary Search on Answer', 'Binary search on response space.', '', '', '', 'O(log N)', 'O(1)', 'None', 'NOT_STARTED', 4),
+('a0a00000-0000-0000-0000-000000000407', 'b0a00000-0000-0000-0000-000000000004', 'Basic Sorting Algorithms', 'Basic sorting methods.', '', '', '', 'O(N^2)', 'O(1)', 'None', 'NOT_STARTED', 5),
+('a0a00000-0000-0000-0000-000000000410', 'b0a00000-0000-0000-0000-000000000004', 'Merge Sort', 'Merge sorting.', '', '', '', 'O(N log N)', 'O(N)', 'None', 'NOT_STARTED', 6),
+('a0a00000-0000-0000-0000-000000000411', 'b0a00000-0000-0000-0000-000000000004', 'Quick Sort', 'Quick sorting.', '', '', '', 'O(N log N)', 'O(log N)', 'None', 'NOT_STARTED', 7),
+('a0a00000-0000-0000-0000-000000000412', 'b0a00000-0000-0000-0000-000000000004', 'Sorting-Based Problem Solving', 'Solving sorting problems.', '', '', '', 'O(N log N)', 'O(1)', 'None', 'NOT_STARTED', 8)
+ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, sequence_order = EXCLUDED.sequence_order;
 
 -- 3. Map/move existing problems to their new patterns and update their purposes
 UPDATE problems SET pattern_id = 'a0a00000-0000-0000-0000-000000000402', purpose = 'Binary search + insertion index' WHERE leetcode_number = 35;

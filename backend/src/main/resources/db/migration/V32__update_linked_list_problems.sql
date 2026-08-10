@@ -1,21 +1,16 @@
 -- V32: Update Linked List subtopics and seed problems idempotently
 
--- 1. Update existing Linked List subtopics names and sequence orders first (to release unique names)
-UPDATE patterns SET name = 'Traversal & Pointer Manipulation', sequence_order = 1 WHERE id = 'a0a00000-0000-0000-0000-000000001001';
-UPDATE patterns SET name = 'Dummy / Sentinel Node', sequence_order = 2 WHERE id = 'a0a00000-0000-0000-0000-000000001002';
-UPDATE patterns SET name = 'Reverse Linked List', sequence_order = 3 WHERE id = 'a0a00000-0000-0000-0000-000000001003';
-UPDATE patterns SET name = 'Fast & Slow Pointer', sequence_order = 4 WHERE id = 'a0a00000-0000-0000-0000-000000001004';
-UPDATE patterns SET name = 'Two Pointers with a Gap', sequence_order = 5 WHERE id = 'a0a00000-0000-0000-0000-000000001005';
-UPDATE patterns SET name = 'Merge / Compare Linked Lists', sequence_order = 6 WHERE id = 'a0a00000-0000-0000-0000-000000001006';
-UPDATE patterns SET name = 'Cycle & Intersection', sequence_order = 7 WHERE id = 'a0a00000-0000-0000-0000-000000001007';
-
--- 2. Ensure new pattern (1008) exists
+-- 1. Ensure all Linked List patterns exist and have correct titles/orders
 INSERT INTO patterns (id, phase_id, name, description, recognition_clues, intuition, generic_approach, time_complexity, space_complexity, common_mistakes, mastery_status, sequence_order) VALUES
+('a0a00000-0000-0000-0000-000000001001', 'b0a00000-0000-0000-0000-000000000010', 'Traversal & Pointer Manipulation', 'Reversing pointer links in-place.', 'Inversing list sequence', 'Maintain pointers to prev, current, and next elements.', 'Adjust current.next = prev, step prev/current forward.', 'O(N)', 'O(1)', 'Losing list head pointer references mid-loop', 'NOT_STARTED', 1),
+('a0a00000-0000-0000-0000-000000001002', 'b0a00000-0000-0000-0000-000000000010', 'Dummy / Sentinel Node', 'Using temporary dummy nodes to handle head modifications smoothly.', 'Head node deletion or list merging', 'Point dummy.next to head to simplify edge conditions.', 'Dummy node link pointer adjustments.', 'O(1)', 'O(1)', 'None', 'NOT_STARTED', 2),
+('a0a00000-0000-0000-0000-000000001003', 'b0a00000-0000-0000-0000-000000000010', 'Reverse Linked List', 'Reversing linked list nodes in-place iteratively or recursively.', 'Reorder list backwards', 'Adjust next pointers in-place.', 'Iterative prev/curr/next step updates.', 'O(N)', 'O(1)', 'None', 'NOT_STARTED', 3),
+('a0a00000-0000-0000-0000-000000001004', 'b0a00000-0000-0000-0000-000000000010', 'Fast & Slow Pointer', 'Using multiple runner pointers at different speeds to detect cycles or find midpoints.', 'List cycles detection or middle node extraction', 'Fast pointer runs at 2x slow speed.', 'Floyds cycle detection runner loops.', 'O(N)', 'O(1)', 'None', 'NOT_STARTED', 4),
+('a0a00000-0000-0000-0000-000000001005', 'b0a00000-0000-0000-0000-000000000010', 'Two Pointers with a Gap', 'pointers traversing linked lists separated by a static index gap.', 'Find N-th node from list end', 'Advance lead pointer by K steps first.', 'Two pointers gap traversal scans.', 'O(N)', 'O(1)', 'None', 'NOT_STARTED', 5),
+('a0a00000-0000-0000-0000-000000001006', 'b0a00000-0000-0000-0000-000000000010', 'Merge / Compare Linked Lists', 'Iterating and merging multiple linked list sequences.', 'Merge sorted collections', 'Iteratively compare and stitch nodes.', 'Stitched lists traversals.', 'O(N)', 'O(1)', 'None', 'NOT_STARTED', 6),
+('a0a00000-0000-0000-0000-000000001007', 'b0a00000-0000-0000-0000-000000000010', 'Cycle & Intersection', 'Detecting cycles or node intersection points across lists.', 'Intersection of two lists', 'Find intersection node using length offsets or sets.', 'Cyclic nodes pointer matching.', 'O(N)', 'O(1)', 'None', 'NOT_STARTED', 7),
 ('a0a00000-0000-0000-0000-000000001008', 'b0a00000-0000-0000-0000-000000000010', 'Pattern Combination', 'Solving complex linked list problems using combinations of traversal, reversing, and fast/slow pointer strategies.', 'Multi-step linked list modification', 'Combine basic modular functions (like reverse and middle node) to solve advanced problems.', 'Multi-method composition.', 'O(N)', 'O(1) or O(N)', 'Pointer lifecycle errors.', 'NOT_STARTED', 8)
-ON CONFLICT (id) DO NOTHING;
-
--- 3. Set correct sequence orders
-UPDATE patterns SET sequence_order = 8 WHERE id = 'a0a00000-0000-0000-0000-000000001008';
+ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, sequence_order = EXCLUDED.sequence_order;
 
 -- 4. Seed Traversal & Pointer Manipulation problems idempotently
 INSERT INTO problems (id, pattern_id, leetcode_number, name, url, difficulty, status, date_solved, time_taken_minutes, attempts_count, independent_solve, purpose)
