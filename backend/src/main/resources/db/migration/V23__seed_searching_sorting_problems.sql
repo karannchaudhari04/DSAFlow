@@ -28,7 +28,7 @@ DELETE FROM patterns WHERE id IN (
 -- 2. Rename remaining subtopics and set correct sequence order
 INSERT INTO patterns (id, phase_id, name, description, recognition_clues, intuition, generic_approach, time_complexity, space_complexity, common_mistakes, mastery_status, sequence_order) VALUES
 ('a0a00000-0000-0000-0000-000000000402', 'b0a00000-0000-0000-0000-000000000004', 'Classic Binary Search', 'Binary search algorithm details.', '', '', '', 'O(log N)', 'O(1)', 'None', 'NOT_STARTED', 1),
-('a0a00000-0000-0000-0000-000000000403', 'b0a00000-0000-0000-0000-000000000403', 'First / Last Occurrence', 'First and last index boundaries.', '', '', '', 'O(log N)', 'O(1)', 'None', 'NOT_STARTED', 2),
+('a0a00000-0000-0000-0000-000000000403', 'b0a00000-0000-0000-0000-000000000004', 'First / Last Occurrence', 'First and last index boundaries.', '', '', '', 'O(log N)', 'O(1)', 'None', 'NOT_STARTED', 2),
 ('a0a00000-0000-0000-0000-000000000404', 'b0a00000-0000-0000-0000-000000000004', 'Lower Bound / Upper Bound', 'Lower/upper bounds extraction.', '', '', '', 'O(log N)', 'O(1)', 'None', 'NOT_STARTED', 3),
 ('a0a00000-0000-0000-0000-000000000406', 'b0a00000-0000-0000-0000-000000000004', 'Binary Search on Answer', 'Binary search on response space.', '', '', '', 'O(log N)', 'O(1)', 'None', 'NOT_STARTED', 4),
 ('a0a00000-0000-0000-0000-000000000407', 'b0a00000-0000-0000-0000-000000000004', 'Basic Sorting Algorithms', 'Basic sorting methods.', '', '', '', 'O(N^2)', 'O(1)', 'None', 'NOT_STARTED', 5),
