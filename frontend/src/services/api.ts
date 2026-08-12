@@ -64,6 +64,9 @@ export interface Problem {
   detail: ProblemDetail;
   purpose?: string;
   mistakes: Mistake[];
+  easeFactor?: number;
+  repetitionCount?: number;
+  intervalDays?: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -155,13 +158,31 @@ export const api = {
 
   // Revisions
   getRevisions: () => request<Revision[]>('/revisions'),
-  completeRevision: (id: string) => request<Revision>(`/revisions/${id}/complete`, {
+  completeRevision: (id: string, data?: { rating?: number; notes?: string }) => request<Revision>(`/revisions/${id}/complete`, {
     method: 'POST',
+    body: data ? JSON.stringify(data) : undefined,
   }),
 
   // Dashboard Stats
   getDashboardStats: () => request<DashboardStats>('/dashboard/stats'),
+
+  // User Settings
+  getSettings: () => request<UserSettings>('/settings'),
+  updateSettings: (mobileNumber: string, smsNotificationsEnabled: boolean) => request<UserSettings>(`/settings?mobileNumber=${encodeURIComponent(mobileNumber)}&smsNotificationsEnabled=${smsNotificationsEnabled}`, {
+    method: 'PUT',
+  }),
+  triggerTestSms: () => request<string>('/settings/trigger-sms', {
+    method: 'POST',
+  }),
 };
+
+export interface UserSettings {
+  id: string;
+  mobileNumber?: string | null;
+  smsNotificationsEnabled: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export interface TopicReadiness {
   phaseId: string;

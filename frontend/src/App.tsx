@@ -15,8 +15,16 @@ import Mistakes from './pages/Mistakes';
 import Readiness from './pages/Readiness';
 import Analytics from './pages/Analytics';
 
-// Create a client
-const queryClient = new QueryClient();
+// Create a client with optimized caching to prevent repeated, redundant API requests
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      refetchOnWindowFocus: false, // Disable refetching every time window gets focus
+      retry: 1, // Only retry once on failure
+    },
+  },
+});
 
 function AppRoutes() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);

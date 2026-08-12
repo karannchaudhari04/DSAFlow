@@ -39,6 +39,12 @@ public class Revision {
     @Column(name = "completed_date")
     private LocalDate completedDate;
 
+    @Column(name = "rating")
+    private Integer rating;
+
+    @Column(name = "notes", columnDefinition = "TEXT")
+    private String notes;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

@@ -8,7 +8,6 @@ export default function Sidebar() {
   const { data: revisions } = useQuery({
     queryKey: ['revisions'],
     queryFn: api.getRevisions,
-    refetchInterval: 15000, // refresh count every 15s
   });
 
   const pendingRevisionsCount = revisions?.filter((r) => {

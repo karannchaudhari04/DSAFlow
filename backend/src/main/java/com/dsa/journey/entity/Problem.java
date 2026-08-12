@@ -68,6 +68,18 @@ public class Problem {
     @Column(name = "purpose", length = 500)
     private String purpose;
 
+    @Column(name = "ease_factor")
+    @Builder.Default
+    private Double easeFactor = 2.5;
+
+    @Column(name = "repetition_count")
+    @Builder.Default
+    private Integer repetitionCount = 0;
+
+    @Column(name = "interval_days")
+    @Builder.Default
+    private Integer intervalDays = 0;
+
     @OneToOne(mappedBy = "problem", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private ProblemDetail detail;
 

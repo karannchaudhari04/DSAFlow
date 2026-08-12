@@ -24,8 +24,12 @@ public class RevisionController {
     }
 
     @PostMapping("/{id}/complete")
-    public ResponseEntity<Revision> completeRevision(@PathVariable UUID id) {
-        Revision revision = revisionService.completeRevision(id);
+    public ResponseEntity<Revision> completeRevision(
+            @PathVariable UUID id,
+            @RequestBody(required = false) com.dsa.journey.dto.RevisionCompleteRequest request) {
+        Integer rating = request != null ? request.getRating() : null;
+        String notes = request != null ? request.getNotes() : null;
+        Revision revision = revisionService.completeRevision(id, rating, notes);
         return ResponseEntity.ok(revision);
     }
 }

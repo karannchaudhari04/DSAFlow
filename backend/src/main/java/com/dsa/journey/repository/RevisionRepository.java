@@ -11,4 +11,5 @@ import java.util.UUID;
 public interface RevisionRepository extends JpaRepository<Revision, UUID> {
     List<Revision> findAllByOrderByDueDateAsc();
     List<Revision> findByStatusOrderByDueDateAsc(String status);
+    List<Revision> findByStatusAndDueDateLessThanEqual(String status, java.time.LocalDate dueDate);
 }

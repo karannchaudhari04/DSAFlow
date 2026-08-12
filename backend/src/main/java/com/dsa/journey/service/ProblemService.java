@@ -165,23 +165,15 @@ public class ProblemService {
     private void scheduleRevisionsIfNecessary(Problem problem) {
         if ("REVISION_SCHEDULED".equals(problem.getStatus())) {
             if (problem.getRevisions() == null || problem.getRevisions().isEmpty()) {
+                problem.setEaseFactor(2.5);
+                problem.setRepetitionCount(1);
+                problem.setIntervalDays(7);
+
                 List<Revision> revisions = new ArrayList<>();
                 revisions.add(Revision.builder()
                         .problem(problem)
                         .revisionNumber(1)
-                        .dueDate(problem.getDateSolved().plusDays(1))
-                        .status("PENDING")
-                        .build());
-                revisions.add(Revision.builder()
-                        .problem(problem)
-                        .revisionNumber(2)
                         .dueDate(problem.getDateSolved().plusDays(7))
-                        .status("PENDING")
-                        .build());
-                revisions.add(Revision.builder()
-                        .problem(problem)
-                        .revisionNumber(3)
-                        .dueDate(problem.getDateSolved().plusDays(30))
                         .status("PENDING")
                         .build());
                 problem.setRevisions(revisions);
@@ -202,7 +194,8 @@ public class ProblemService {
                 for (Problem existing : existingList) {
                     existing.setLeetcodeVerified(true);
                     if (!"MASTERED".equals(existing.getStatus())) {
-                        existing.setStatus("COMPLETED");
+                        existing.setStatus("REVISION_SCHEDULED");
+                        scheduleRevisionsIfNecessary(existing);
                     }
                     problemRepository.save(existing);
                 }
@@ -212,7 +205,7 @@ public class ProblemService {
                         .name(req.getName())
                         .url(req.getUrl())
                         .difficulty(req.getDifficulty().toUpperCase())
-                        .status("COMPLETED")
+                        .status("REVISION_SCHEDULED")
                         .dateSolved(LocalDate.now())
                         .attemptsCount(1)
                         .independentSolve(true)
@@ -228,6 +221,7 @@ public class ProblemService {
                         .build();
 
                 problem.setDetail(detail);
+                scheduleRevisionsIfNecessary(problem);
                 problemRepository.save(problem);
             }
         }
