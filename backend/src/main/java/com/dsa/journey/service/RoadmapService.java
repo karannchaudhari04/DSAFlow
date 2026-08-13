@@ -20,6 +20,7 @@ public class RoadmapService {
     private final PatternRepository patternRepository;
     private final com.dsa.journey.repository.ProblemRepository problemRepository;
 
+    @Transactional  // Override class-level readOnly=true — setStatus() mutates managed entities
     public List<Phase> getAllPhases() {
         List<Phase> phases = phaseRepository.findAllByOrderBySequenceOrderAsc();
         List<com.dsa.journey.entity.Problem> problems = problemRepository.findAll();

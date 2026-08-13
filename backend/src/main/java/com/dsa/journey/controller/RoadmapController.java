@@ -13,7 +13,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:5173")
 public class RoadmapController {
 
     private final RoadmapService roadmapService;

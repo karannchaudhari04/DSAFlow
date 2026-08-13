@@ -57,7 +57,7 @@ public class RevisionService {
             }
         } else {
             // Passed the review!
-            if (revision.getRevisionNumber() == 1) {
+            if (Integer.valueOf(1).equals(revision.getRevisionNumber())) {
                 // Passed Round 1 (due in 7 days). Next round is Round 2 (due in 30 days).
                 interval = 30;
                 rep = 2;
@@ -74,15 +74,17 @@ public class RevisionService {
         problem.setIntervalDays(interval);
         problemRepository.save(problem);
 
-        // Schedule the next revision
-        LocalDate nextDueDate = LocalDate.now().plusDays(interval);
-        Revision nextRevision = Revision.builder()
-                .problem(problem)
-                .revisionNumber(revision.getRevisionNumber() + 1)
-                .dueDate(nextDueDate)
-                .status("PENDING")
-                .build();
-        revisionRepository.save(nextRevision);
+        // Schedule the next revision only if the problem is not yet MASTERED
+        if (!"MASTERED".equals(problem.getStatus())) {
+            LocalDate nextDueDate = LocalDate.now().plusDays(interval);
+            Revision nextRevision = Revision.builder()
+                    .problem(problem)
+                    .revisionNumber(revision.getRevisionNumber() + 1)
+                    .dueDate(nextDueDate)
+                    .status("PENDING")
+                    .build();
+            revisionRepository.save(nextRevision);
+        }
 
         return savedRevision;
     }
