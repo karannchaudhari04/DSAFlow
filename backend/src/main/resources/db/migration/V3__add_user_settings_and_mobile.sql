@@ -1,5 +1,5 @@
 -- V3: Add user settings table for mobile number and SMS notifications
-CREATE TABLE user_settings (
+CREATE TABLE IF NOT EXISTS user_settings (
     id UUID PRIMARY KEY,
     mobile_number VARCHAR(20),
     sms_notifications_enabled BOOLEAN DEFAULT TRUE,
