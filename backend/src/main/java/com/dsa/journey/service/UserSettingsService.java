@@ -15,7 +15,7 @@ public class UserSettingsService {
     private final UserSettingsRepository userSettingsRepository;
     private static final UUID DEFAULT_SETTINGS_ID = UUID.fromString("e0a00000-0000-0000-0000-000000000001");
 
-    @Transactional(readOnly = true)
+    @Transactional  // Cannot be readOnly — orElseGet fallback calls save()
     public UserSettings getSettings() {
         return userSettingsRepository.findById(DEFAULT_SETTINGS_ID)
                 .orElseGet(() -> {

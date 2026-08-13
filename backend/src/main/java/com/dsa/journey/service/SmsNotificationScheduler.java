@@ -45,7 +45,7 @@ public class SmsNotificationScheduler {
                 .collect(Collectors.joining("\n"));
 
         String message = String.format(
-                "⚡ DSA Journey: You have %d revision(s) due today! Keep up the pattern recall streak:\n\n%s\n\nSolve them here: http://localhost:5173/revisions",
+                "⚡ DSA Journey: You have %d revision(s) due today! Keep up the pattern recall streak:\n\n%s\n\nSolve them here: https://dsa-flow-amber.vercel.app/revisions",
                 dueRevisions.size(),
                 problemList
         );
